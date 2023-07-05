@@ -1,18 +1,12 @@
-import argparse
-
-import torch
-import numpy as np
-import sys
 import os
-import dlib
+os.environ["MKL_THREADING_LAYER"] = "GNU"
 
-
-from PIL import Image
-
+import argparse
 
 from models.Embedding import Embedding
 from models.Alignment import Alignment
 from models.Blending import Blending
+
 
 def main(args):
     ii2s = Embedding(args)
@@ -22,14 +16,14 @@ def main(args):
     # # ii2s.invert_images_in_FS()
 
     # ##### Option 2: image path
-    # # ii2s.invert_images_in_W('input/face/28.png')
-    # # ii2s.invert_images_in_FS('input/face/28.png')
+    # # ii2s.invert_images_in_W('input/28.png')
+    # # ii2s.invert_images_in_FS('input/28.png')
     #
     ##### Option 3: image path list
 
-    # im_path1 = 'input/face/90.png'
-    # im_path2 = 'input/face/15.png'
-    # im_path3 = 'input/face/117.png'
+    # im_path1 = 'input/90.png'
+    # im_path2 = 'input/15.png'
+    # im_path3 = 'input/117.png'
 
     im_path1 = os.path.join(args.input_dir, args.im_path1)
     im_path2 = os.path.join(args.input_dir, args.im_path2)
@@ -40,24 +34,29 @@ def main(args):
     ii2s.invert_images_in_FS([*im_set])
 
     align = Alignment(args)
-    align.align_images(im_path1, im_path2, sign=args.sign, align_more_region=False, smooth=args.smooth)
+    align.align_images(
+        im_path1, im_path2, sign=args.sign, align_more_region=False, smooth=args.smooth
+    )
     if im_path2 != im_path3:
-        align.align_images(im_path1, im_path3, sign=args.sign, align_more_region=False, smooth=args.smooth, save_intermediate=False)
+        align.align_images(
+            im_path1,
+            im_path3,
+            sign=args.sign,
+            align_more_region=False,
+            smooth=args.smooth,
+            save_intermediate=False,
+        )
 
     blend = Blending(args)
     blend.blend_images(im_path1, im_path2, im_path3, sign=args.sign)
 
 
-
-
-
-
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Barbershop")
 
-    parser = argparse.ArgumentParser(description='Barbershop')
-
+    # fmt: off
     # I/O arguments
-    parser.add_argument('--input_dir', type=str, default='input/face',
+    parser.add_argument('--input_dir', type=str, default='input',
                         help='The directory of the images to be inverted')
     parser.add_argument('--output_dir', type=str, default='output',
                         help='The directory to save the latent codes and inversion images')
@@ -97,7 +96,6 @@ if __name__ == "__main__":
     parser.add_argument('--FS_steps', type=int, default=250, help='Number of W space optimization steps')
 
 
-
     # Alignment loss options
     parser.add_argument('--ce_lambda', type=float, default=1.0, help='cross entropy loss multiplier factor')
     parser.add_argument('--style_lambda', type=str, default=4e4, help='style loss multiplier factor')
@@ -109,9 +107,7 @@ if __name__ == "__main__":
     parser.add_argument('--face_lambda', type=float, default=1.0, help='')
     parser.add_argument('--hair_lambda', type=str, default=1.0, help='')
     parser.add_argument('--blend_steps', type=int, default=400, help='')
-
-
-
+    # fmt: on
 
     args = parser.parse_args()
     main(args)

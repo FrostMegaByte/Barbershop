@@ -40,7 +40,7 @@ All dependencies for defining the environment are provided in `environment/envir
 
 ## Download II2S images
 Please download the [II2S](https://drive.google.com/drive/folders/15jsR9yy_pfDHiS9aE3HcYDgwtBbAneId?usp=sharing) 
-and put them in the `input/face` folder.
+and put them in the `input` folder.
 
 
 ## Getting Started  

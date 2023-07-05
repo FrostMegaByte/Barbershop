@@ -5,12 +5,15 @@ from torch.nn import functional as F
 import os
 
 from losses.style.custom_loss import custom_loss, prepare_mask
-from losses.style.vgg_activations import VGG16_Activations, VGG19_Activations, Vgg_face_dag
+from losses.style.vgg_activations import (
+    VGG16_Activations,
+    VGG19_Activations,
+    Vgg_face_dag,
+)
 
 
 class StyleLoss(nn.Module):
     def __init__(self, VGG16_ACTIVATIONS_LIST=[21], normalize=False, distance="l2"):
-
         super(StyleLoss, self).__init__()
 
         self.vgg16_act = VGG16_Activations(VGG16_ACTIVATIONS_LIST)
@@ -20,11 +23,9 @@ class StyleLoss(nn.Module):
         self.distance = distance
 
     def get_features(self, model, x):
-
         return model(x)
 
     def mask_features(self, x, mask):
-
         mask = prepare_mask(x, mask)
         return x * mask
 
@@ -49,7 +50,6 @@ class StyleLoss(nn.Module):
 
         loss = 0.0
         for layer in range(0, len(act_x)):
-
             # mask features if present
             if mask1 is not None:
                 feat_x = self.mask_features(act_x[layer], mask1)
