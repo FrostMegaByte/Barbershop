@@ -25,6 +25,7 @@ def process_images(personal_image, hairstyle_image, haircolor_image):
     print("\n[2] Starting hairstyle generation...")
     subprocess.run(["python", "main.py", "--im_path1", f"{personal_image_name}.png", "--im_path2", f"{hairstyle_image_name}.png", "--im_path3", f"{haircolor_image_name}.png", "--sign", "realistic", "--smooth", "5"])
     
+    print("\n[3] Opening generated file...")
     result_image = PIL.Image.open(f"output/{personal_image_name}_{hairstyle_image_name}_{haircolor_image_name}_realistic.png")
 
     return result_image
@@ -43,4 +44,4 @@ with gr.Blocks() as demo:
 
     image_button.click(process_images, inputs=[personal_image_input, hairstyle_image_input, haircolor_image_input], outputs=image_output)
 
-demo.launch()
+demo.launch(server_name="0.0.0.0", server_port=7860)

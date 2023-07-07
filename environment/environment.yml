@@ -1,10 +1,9 @@
 name: Barbershop
 channels:
-  - anaconda
-  - conda-forge
-  - pytorch
-  - nvidia
   - defaults
+  - pytorch
+  - conda-forge
+  - nvidia
 dependencies:
   - _libgcc_mutex
   - argcomplete
